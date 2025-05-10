@@ -1,10 +1,11 @@
 using CustomImplementations.CustomMiddlewares;
+using CustomImplementations.Models;
 using CustomImplementations.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.Configure<RateLimitOptions>(builder.Configuration.GetSection("RateLimitOptions"));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
