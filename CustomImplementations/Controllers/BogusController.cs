@@ -45,6 +45,11 @@ namespace CustomImplementations.Controllers
         [HttpGet("random_users_list")]
         public IActionResult GetRandomUserList([FromQuery] int count = 10)
         {
+            if(count > 100)
+            {
+                return BadRequest("Count cannot be more than 100.");
+            }
+
             var cacheKey = "random_users_list";
             var cached = _cacheService.Get<List<FakeUser>>(cacheKey);
 
