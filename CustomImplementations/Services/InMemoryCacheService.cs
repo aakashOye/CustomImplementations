@@ -16,7 +16,7 @@ namespace CustomImplementations.Services
             _loggerService = loggerService;
         }
 
-        public CacheResult<T>? GetT<T>(string key)
+        public CacheResult<T>? Get<T>(string key)
         {
             if (_cache.TryGetValue(key, out var item))
             {
