@@ -1,3 +1,4 @@
+using CustomImplementations.CustomCache;
 using CustomImplementations.CustomMiddlewares;
 using CustomImplementations.Models;
 using CustomImplementations.Services;
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<LoggerService>();
 builder.Services.AddSingleton<IRateLimiterService, RateLimiterService>();
+builder.Services.AddSingleton<ICacheService, InMemoryCacheService>();
 
 var app = builder.Build();
 
