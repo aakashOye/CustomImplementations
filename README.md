@@ -33,15 +33,57 @@ Configure your limits in `appsettings.json`:
 }
 ```
 
+---
+
+# 🧠 InMemoryCachingService (.NET Custom Implementation)
+
+A lightweight, extensible in-memory caching layer for .NET, following the `CacheResult<T>` pattern for safe and expressive cache access.
+
+---
+
+## 🚀 Features
+
+- ✅ Thread-safe in-memory caching using `ConcurrentDictionary`
+- ✅ `CacheResult<T>` pattern to avoid null issues
+- ✅ Optional **sliding expiration**
+- ✅ Customizable caching logic per key
+- ✅ Middleware-friendly structure
+- ✅ Designed with extensibility in mind (e.g., decorators, LRU, Redis, etc.)
+
+---
+
+## 📦 How It Works
+
+### `CacheResult<T>` Pattern
+
+All `Get<T>` operations return a `CacheResult<T>` object:
+
+```csharp
+public class CacheResult<T>
+{
+    public static CacheResult<T> Miss() => new(false, default!);
+    public static CacheResult<T> Hit(T value) => new(true, value);
+
+    public bool Found { get; }
+    public T Value { get; }
+
+    private CacheResult(bool found, T value)
+    {
+        Found = found;
+        Value = value;
+    }
+}
+```
+
 ## 🚀 Roadmap
 
 ### ✅ Implemented
 
 - [x] **RateLimiter Middleware** – Per-IP request limiting with spammer detection.
+- [x] **Custom Caching Layer** – Lightweight in-memory caching with expiration support.
 
+      
 ### 🧠 Coming Soon
-
-- [ ] **Custom Caching Layer** – Lightweight in-memory caching with expiration support.
 - [ ] **Retry Policy Middleware** – Simple retry mechanism for transient failures.
 - [ ] **In-Memory Pub/Sub System** – Basic publisher-subscriber architecture using events.
 - [ ] **Job Scheduling Service** – Schedule and run background tasks on custom intervals.
