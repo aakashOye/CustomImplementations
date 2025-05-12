@@ -22,16 +22,26 @@ namespace CustomImplementations.Services
             {
                 if (item.IsExpired)
                 {
-                    _cache.TryRemove(key, out _);
+                    // If the item is expired, remove it and return a cache miss
+                    _loggerService.Log($"[Cache EXPIRED] Key: {key}");
+                    Remove(key);
                     return CacheResult<T>.Miss();
                 }
 
+                // Refresh the item to extend its expiration time
                 item.Refresh(); // Extend the life of the item - Sliding Expiration
 
                 if (item.Value is T typedValue)
+                {
+                    // If the item is found and not expired, return a cache hit
+                    _loggerService.Log($"[Cache HIT] Key: {key}");
                     return CacheResult<T>.Hit(typedValue);
+                }
+                   
             }
-
+            
+            // If the item is not found or expired, return a cache miss
+            _loggerService.Log($"[Cache MISS] Key: {key}");
             return CacheResult<T>.Miss();
         }
 
@@ -39,11 +49,13 @@ namespace CustomImplementations.Services
         {
             var item = new CacheItem(value!, expiry);
             _cache[key] = item;
+            _loggerService.Log($"[Cache SET] Key: {key}, TTL: {(expiry).Value.TotalSeconds}s");
         }
 
         public void Remove(string key)
         {
             _cache.TryRemove(key, out _);
+            _loggerService.Log($"[Cache REMOVE] Key: {key}");
         }
 
         private async Task CleanupTaskAsync()
